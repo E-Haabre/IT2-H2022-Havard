@@ -16,69 +16,53 @@ kortstokk = [hjerter, ruter, spa, kløver]
 
 
 class Blackjack:
-    def __init__(self, d_take, runde=0, players=1):
+    def __init__(self, d_take, d_hand = [], runde=0, players=1):
         self.runde = runde
         self.players = players
-        self.dealer = []
         self.d_take = d_take
+        self.d_hand = d_hand
     
-    def d_Cards(self):
-        self.dealer.append(self.d_take)
-        print(f"Dealers hånd:\n{self.dealer}")
-
+    def motta(self):
+        self.d_hand.append(self.d_take)
+        
+    def holding(self):
+        print(f"Dealers hånd:\n{self.d_hand}")
 
 class Kort:
-    def __init__(self, antall = 1, valgt = []):
+    def __init__(self, antall, person, valgt = []):
         self.antall = antall
         self.valgt = valgt
-
+        self.person = person
 
     def stokk(self):
-        self.valgt.clear()
-        for i in range(self.antall):
-            s = random.randint(0,3)
-            n = random.randint(0,len(kortstokk[s])-1)
-            self.valgt.insert(0, kortstokk[s][n])
-            kstokk = kortstokk[s] 
-            kstokk.remove(self.valgt[0])
-        
-            
-
-    def dele(self):
-        kjør = Kort(2)
-        kjør.stokk()
-        x = Player(self.valgt)
-        x.holding()
-        kjør = Kort(1)
-        kjør.stokk()
-        x = Blackjack(self.valgt)
-        x.d_Cards()
-        kjør = Kort()
-        kjør.valg()
-        
-        
+        self.valgt.clear()  
+        s = random.randint(0, 3)
+        n = random.randint(0, len(kortstokk[s])-1)
+        #self.valgt.insert(0, kortstokk[s][n])
+        self.kort = kortstokk[s][n]
+        kortstokk[s].remove(self.kort)
+        return self.kort
         
     def valg(self):
-
-        svar = input("Hit or stand?(h/s)\n>> ")
-        if svar == "h":
-            kjør = Kort(1)
-            kjør.stokk()
-            x = Player(self.valgt)
-            x.holding()
-        elif svar == "s":
-            kjør = Kort(1)
-            kjør.stokk()
-            Blackjack.d_Cards(self.valgt)
+        for i in range(0, self.antall):
+            print(self.person)
+            self.person(Kort(self.antall, self.person).stokk()).motta()
+       
     
 class Player:
-    def __init__(self,  take, bank = 500,):
+    def __init__(self, take, bank = 500, hand = []):
         self.bank = bank
         self.take = take
-        self.hand = []
-    def holding(self):
+        self.hand = hand
+        
+    def motta(self):
         self.hand.append(self.take)
+
+    def holding(self):
         print(f"Din hånd:\n{self.hand}")
 
-kjør = Kort()
-kjør.dele()
+
+Kort(2, Player).valg()
+Kort(1, Blackjack).valg()
+Player(0).holding()
+Blackjack(0).holding()
