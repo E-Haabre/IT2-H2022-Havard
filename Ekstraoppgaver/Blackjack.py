@@ -1,4 +1,5 @@
-import random
+                        # Er ikke helt ferdig med denne koden, men den funker på det mest grunnleggende nivå. Skal kommentere den senere
+import random 
 
 hjerter = ["h_ace"]
 ruter = ["r_ace"]
@@ -28,6 +29,9 @@ class Blackjack:
     def holding(self):
         print(f"Dealers hånd:\n{self.d_hand}")
 
+    #def spill(self):
+
+
 class Kort:
     def __init__(self, antall, person, valgt = []):
         self.antall = antall
@@ -41,11 +45,12 @@ class Kort:
         #self.valgt.insert(0, kortstokk[s][n])
         self.kort = kortstokk[s][n]
         kortstokk[s].remove(self.kort)
+        #print(kortstokk)
         return self.kort
         
     def valg(self):
         for i in range(0, self.antall):
-            print(self.person)
+            #print(self.person)
             self.person(Kort(self.antall, self.person).stokk()).motta()
        
     
@@ -54,6 +59,7 @@ class Player:
         self.bank = bank
         self.take = take
         self.hand = hand
+        self.hit = False
         
     def motta(self):
         self.hand.append(self.take)
@@ -61,8 +67,21 @@ class Player:
     def holding(self):
         print(f"Din hånd:\n{self.hand}")
 
+    def spill(self):
+        hit = input("Hit eller stand? \n>> ")
+        if hit == "hit":
+            self.hit = True
+        #print(self.hit)    
+        return self.hit
+        
+
 
 Kort(2, Player).valg()
 Kort(1, Blackjack).valg()
 Player(0).holding()
 Blackjack(0).holding()
+
+while Player(0).spill() == True:
+    Kort(1,Player).valg()
+    Player(0).holding()
+
