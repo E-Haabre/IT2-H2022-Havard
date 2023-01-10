@@ -45,10 +45,14 @@ class Blackjack:
         if vis == True:
             print(f"Dealers hånd:\n{self.d_hand}\nSum: {sum(self.d_hand)}")
         
-        if sum(self.d_hand) > 21:
-            print("Dealer overtrådde 21")
-            return "Vinn"
+            if sum(self.d_hand) > 21:
+                print("Dealer overtrådde 21")
+                return "Vinn"
         return sum(self.d_hand)
+
+    def checkbj(self, poeng, person, tilstand):
+        if poeng == 21:
+            print(f"{person} fikk blackjack, du {tilstand}")
 
     def spill(self): 
         os.system(command)
@@ -57,20 +61,20 @@ class Blackjack:
         Player(0).holding(True)
         Blackjack(0).holding(True)
 
+        
+        Blackjack(0).checkbj(Player(0).holding(False), "Player", "Vinn")
+        
         while Player(0).spill() == True:
             os.system(command)
-            Kort(1,Player).valg()
+            Kort(1, Player).valg()
             Player(0).holding(True)
-
-        if Player(0).holding(False) == "Tap":
-            return
-
-        while Blackjack(0).holding(False) < 19:
-            os.system(command)
-            Kort(1,Blackjack).valg()
+        os.system(command)
         
-        if Blackjack(0).holding(False) == "Vinn":
-            return
+        Kort(1, Blackjack).valg()
+        Blackjack(0).checkbj(Blackjack(0).holding(False), "Dealer", "Tapte")
+
+        while Blackjack(0).holding(True) < 17:
+            Kort(1, Blackjack).valg()
 
         resultat = []
         resultat.append(Player(0).holding(False))
@@ -122,12 +126,13 @@ class Player:
         if vis == True:
             print(f"Din hånd:\n{self.hand}\nSum: {sum(self.hand)}")
 
-        if sum(self.hand) > 21:
-            print("Du overtrådde 21")
-            return "Tap"
         return sum(self.hand)
 
     def spill(self):
+        if sum(self.hand) > 21:
+            print("Du overtrådde 21")
+            return "Tap"
+            
         hit = input("Hit eller stand? \n>> ")
         if hit == "hit":
             self.hit = True
